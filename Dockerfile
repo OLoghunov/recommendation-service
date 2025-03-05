@@ -1,10 +1,14 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY . /app
+COPY requirements.txt .
 
-RUN pip install --no-cache-dir fastapi uvicorn
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src /app/src
+
+COPY .env.docker .env.docker
 
 EXPOSE 8000
 
