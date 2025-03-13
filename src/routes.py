@@ -5,11 +5,11 @@ from fastapi import APIRouter
 from .schemas import FilmShortModel
 from .service import RecommendService
 
-recommendRouter = APIRouter()
-recommendService = RecommendService()
+recommend_router = APIRouter()
+recommend_service = RecommendService()
 
 
-@recommendRouter.post("/films", response_model=List[FilmShortModel])
+@recommend_router.post("/films", response_model=List[FilmShortModel])
 async def get_recommendations(films: List[FilmShortModel]):
 
-    return await recommendService.getRecommendations(films)
+    return await recommend_service.get_recommendations(films)

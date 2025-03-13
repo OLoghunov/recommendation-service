@@ -8,19 +8,19 @@ from .config import Config
 
 class RecommendService:
 
-    async def getRecommendations(
+    async def get_recommendations(
         self, films: List[FilmShortModel]
     ) -> List[FilmShortModel]:
 
-        seenIds = {film.id for film in films}
+        seen_ids = {film.id for film in films}
 
         count: Dict = Counter(genre.name for film in films for genre in film.genres)
-        topGenres = [gnr[0] for gnr in count.most_common(2)]
+        top_genres = [gnr[0] for gnr in count.most_common(2)]
 
-        if not topGenres:
+        if not top_genres:
             return []
 
-        query_params = "&".join([f"genres.name={genre}" for genre in topGenres])
+        query_params = "&".join([f"genres.name={genre}" for genre in top_genres])
 
         url = f"https://api.kinopoisk.dev/v1.4/movie?page=1&limit=10&{query_params}"
 
@@ -29,11 +29,11 @@ class RecommendService:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers=headers)
 
-        filmsData: List[dict] = response.json()["docs"]
+        films_data: List[dict] = response.json()["docs"]
 
-        filteredFilms = [film for film in filmsData if film["id"] not in seenIds]
+        filtered_films = [film for film in films_data if film["id"] not in seen_ids]
 
-        filteredFilms.sort(key=lambda x: x["rating"]["kp"], reverse=True)
+        filtered_films.sort(key=lambda x: x["rating"]["kp"], reverse=True)
 
         recommendations = [
             FilmShortModel(
@@ -44,7 +44,7 @@ class RecommendService:
                 poster=film.get("poster", {}).get("url", ""),
                 status=FilmStatus.PLANNED
             )
-            for film in filteredFilms
+            for film in filtered_films
         ]
 
         return recommendations

@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 
-from .routes import recommendRouter
+from .routes import recommend_router
 
 
 app = FastAPI()
 
 app.include_router(
-    recommendRouter,
+    recommend_router,
     prefix="/recommend",
     tags=["recommendations"])
