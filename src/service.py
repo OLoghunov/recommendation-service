@@ -48,4 +48,3 @@ class RecommendService:
         ]
 
         return recommendations
-

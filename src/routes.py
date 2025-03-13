@@ -11,5 +11,5 @@ recommendService = RecommendService()
 
 @recommendRouter.post("/films", response_model=List[FilmShortModel])
 async def get_recommendations(films: List[FilmShortModel]):
-    
+
     return await recommendService.getRecommendations(films)
